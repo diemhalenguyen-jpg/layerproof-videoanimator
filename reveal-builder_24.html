@@ -249,6 +249,21 @@
   #statusbar{height:26px;display:flex;align-items:center;gap:10px;padding:0 12px;border-top:1px solid var(--border);flex-shrink:0;font-size:10px;color:var(--g7);font-family:var(--font-ui);}
   .status-sep{color:var(--border2);}
 
+  /* ARRANGE */
+  #phase-arrange{flex:1;display:none;flex-direction:column;min-height:0;}
+  .arrange-bar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:52px;border-bottom:1px solid var(--border);flex-shrink:0;gap:16px;}
+  .arrange-bar-center{text-align:center;flex:1;}
+  .arrange-bar-title{font-family:var(--font-ui);font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;}
+  .arrange-bar-sub{font-family:var(--font-ui);font-size:10px;color:var(--dim);}
+  #arrange-grid{flex:1;overflow-y:auto;padding:28px 32px;display:flex;flex-wrap:wrap;gap:18px;align-content:flex-start;justify-content:center;}
+  .arr-thumb{position:relative;width:130px;border-radius:8px;overflow:hidden;cursor:grab;border:1.5px solid var(--border);background:#111;transition:border-color 0.12s,opacity 0.12s,transform 0.1s;user-select:none;flex-shrink:0;}
+  .arr-thumb:hover{border-color:var(--g6);transform:translateY(-1px);}
+  .arr-thumb.drag-over{border-color:var(--amber);background:rgba(245,158,11,0.08);}
+  .arr-thumb.arr-dragging{opacity:0.2;transform:scale(0.96);}
+  .arr-thumb img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;pointer-events:none;}
+  .arr-num{position:absolute;bottom:6px;left:6px;font-size:11px;font-weight:700;background:rgba(0,0,0,0.75);color:var(--g9);padding:2px 7px;border-radius:4px;letter-spacing:0.5px;}
+  .arr-name{font-family:var(--font-ui);font-size:9px;color:var(--dim);padding:5px 8px;background:var(--surface);border-top:1px solid var(--border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
   /* PRESENT */
   #phase-present{flex:1;display:none;flex-direction:column;background:#000;}
   .pbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:42px;background:rgba(0,0,0,0.9);border-bottom:1px solid #1a1a1a;flex-shrink:0;gap:8px;}
@@ -310,6 +325,18 @@
 E.g.: Brand memory consistently outweighs [S2: brand memory consistently outweighs] product quality…" style="font-family:var(--font);font-size:11px;width:100%;height:140px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:10px;outline:none;resize:vertical;line-height:1.6;"></textarea>
     </div>
     <p class="order-note">Files named by number (1.png, 2.png…) map to S1, S2… in script mode.</p>
+  </div>
+
+  <div id="phase-arrange">
+    <div class="arrange-bar">
+      <button class="btn btn-sm" onclick="goHome()">← Back</button>
+      <div class="arrange-bar-center">
+        <div class="arrange-bar-title">Arrange slides</div>
+        <div class="arrange-bar-sub">Drag thumbnails into the order you want — set this before editing, timestamps don't survive reordering</div>
+      </div>
+      <button class="btn btn-sm btn-green" onclick="continueToEditor()">Continue to editor →</button>
+    </div>
+    <div id="arrange-grid"></div>
   </div>
 
   <div id="phase-editor">
@@ -396,28 +423,6 @@ E.g.: Brand memory consistently outweighs [S2: brand memory consistently outweig
             <span class="img-adjust-val" id="adj-blacks-val">0</span>
           </div>
         </div>
-        <div class="panel-section">
-          <span class="panel-section-label">Caption <span class="info-tip" data-tip="Displays the transcript text as live subtitles during presentation. Toggle CC on/off, adjust font size, and drag the position slider to move the caption up or down within the video frame.">!</span></span>
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;">
-            <label style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted);cursor:pointer;user-select:none;">
-              <input type="checkbox" id="caption-enabled-editor" checked style="accent-color:var(--green);width:11px;height:11px;"
-                onchange="captionEnabled=this.checked;document.getElementById('caption-toggle').checked=this.checked;updateCaptionOverlay();">
-              Show captions
-            </label>
-          </div>
-          <div class="img-adjust-row">
-            <span class="img-adjust-label">Font size</span>
-            <input type="range" id="caption-font-slider" min="8" max="48" value="18" step="1"
-              oninput="captionFontSize=+this.value;document.getElementById('caption-size').value=this.value;document.getElementById('caption-font-val').textContent=this.value;updateCaptionOverlay();">
-            <span class="img-adjust-val" id="caption-font-val">18</span>
-          </div>
-          <div class="img-adjust-row">
-            <span class="img-adjust-label">Position</span>
-            <input type="range" id="caption-y-slider" min="2" max="45" value="8" step="1"
-              oninput="captionYPct=+this.value;document.getElementById('caption-y-val').textContent=this.value+'%';updateCaptionOverlay();">
-            <span class="img-adjust-val" id="caption-y-val">8%</span>
-          </div>
-        </div>
         <div id="cat-section">
           <div class="cat-section-head">
             <span class="panel-section-label" style="margin:0;">Cats <span class="info-tip" data-tip="Cat stickers appear at the position of the most recently revealed region and animate in with each new reveal. Load a folder of PNG/GIF images — they'll be used as the sticker. Drag the cat on the canvas to reposition it.">!</span></span>
@@ -434,10 +439,39 @@ E.g.: Brand memory consistently outweighs [S2: brand memory consistently outweig
           </div>
           <div id="cat-panel-thumbnails"><span style="font-size:9px;color:var(--dim);padding:4px 4px;align-self:center;">click 📁 Load to load cats</span></div>
         </div>
+        <div class="panel-section" id="caption-section">
+          <span class="panel-section-label">Caption <span class="info-tip" data-tip="Live subtitles during presentation, synced to audio. The position preview shows where captions will appear — drag the slider or type a value. Enable ✦ Word sync in the presentation bar for karaoke-style word highlighting.">!</span></span>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+            <label style="display:flex;align-items:center;gap:4px;font-size:10px;color:var(--muted);cursor:pointer;user-select:none;">
+              <input type="checkbox" id="caption-enabled-editor" checked style="accent-color:var(--green);width:11px;height:11px;"
+                onchange="captionEnabled=this.checked;document.getElementById('caption-toggle').checked=this.checked;renderEditor();updateCaptionOverlay();">
+              Show captions
+            </label>
+          </div>
+          <div class="img-adjust-row">
+            <span class="img-adjust-label">Font size</span>
+            <input type="range" id="caption-font-slider" min="8" max="48" value="18" step="1"
+              oninput="captionFontSize=+this.value;document.getElementById('caption-size').value=this.value;document.getElementById('caption-font-num').value=this.value;renderEditor();updateCaptionOverlay();">
+            <input type="number" id="caption-font-num" min="8" max="48" value="18" step="1"
+              style="font-family:var(--font);font-size:9px;width:38px;background:var(--bg);border:1px solid var(--border2);border-radius:3px;color:var(--text);padding:2px 3px;outline:none;text-align:center;"
+              oninput="const v=Math.max(8,Math.min(48,+this.value||18));captionFontSize=v;document.getElementById('caption-font-slider').value=v;document.getElementById('caption-size').value=v;renderEditor();updateCaptionOverlay();">
+          </div>
+          <div class="img-adjust-row">
+            <span class="img-adjust-label">Position</span>
+            <input type="range" id="caption-y-slider" min="2" max="95" value="50" step="1"
+              oninput="captionYPct=+this.value;document.getElementById('caption-y-num').value=this.value;renderEditor();updateCaptionOverlay();">
+            <input type="number" id="caption-y-num" min="2" max="95" value="50" step="1"
+              style="font-family:var(--font);font-size:9px;width:38px;background:var(--bg);border:1px solid var(--border2);border-radius:3px;color:var(--text);padding:2px 3px;outline:none;text-align:center;"
+              oninput="const v=Math.max(2,Math.min(95,+this.value||50));captionYPct=v;document.getElementById('caption-y-slider').value=v;renderEditor();updateCaptionOverlay();">
+          </div>
+        </div>
         <div id="transcript-section">
           <div id="transcript-section-head">
             <span class="panel-section-label" style="margin:0;">Transcript <span class="info-tip" data-tip="Upload your voiceover audio and enter a Gemini API key to auto-transcribe it into timestamped segments. Each segment becomes a clickable cue you can assign to a reveal region. You can also click any segment text to edit it for captions.">!</span></span>
-            <span id="transcript-status">No transcript yet.</span>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px;">
+              <span id="transcript-status">No transcript yet.</span>
+              <span id="word-timing-status" style="display:none;font-size:8px;letter-spacing:0.3px;"></span>
+            </div>
           </div>
           <div id="transcript-list"></div>
         </div>
@@ -506,8 +540,13 @@ E.g.: Brand memory consistently outweighs [S2: brand memory consistently outweig
           <input type="number" id="caption-size" min="8" max="48" value="18"
             style="font-family:var(--font);font-size:9px;width:36px;background:#111;border:1px solid #2a2a2a;border-radius:3px;color:#666;padding:2px 4px;outline:none;text-align:center;"
             title="Caption font size (canvas pts)"
-            oninput="captionFontSize=Math.max(8,Math.min(48,+this.value||18));document.getElementById('caption-font-slider').value=captionFontSize;document.getElementById('caption-font-val').textContent=captionFontSize;updateCaptionOverlay();">
+            oninput="captionFontSize=Math.max(8,Math.min(48,+this.value||18));document.getElementById('caption-font-slider').value=captionFontSize;document.getElementById('caption-font-num').value=captionFontSize;updateCaptionOverlay();">
           <span style="font-size:9px;color:#444;">pt</span>
+          <div style="width:1px;height:10px;background:#2a2a2a;margin:0 2px;"></div>
+          <label style="display:flex;align-items:center;gap:4px;font-size:10px;cursor:pointer;user-select:none;" title="Karaoke word highlight — active word turns yellow as it's spoken. Loads in background after transcription.">
+            <input type="checkbox" id="karaoke-toggle" checked onchange="karaokeEnabled=this.checked;updateCaptionOverlay();" style="accent-color:#FFDE42;width:11px;height:11px;">
+            <span id="karaoke-label" style="color:#555;font-size:11px;">✦</span>
+          </label>
         </div>
         <div class="pbar-divider"></div>
         <div class="key-hints">
@@ -520,7 +559,7 @@ E.g.: Brand memory consistently outweighs [S2: brand memory consistently outweig
     <div id="present-area" onclick="presentAdvance()">
       <div id="canvas-wrapper" style="position:relative;display:inline-flex;line-height:0;flex-shrink:0;">
         <canvas id="present-canvas"></canvas>
-        <div id="caption-overlay" style="position:absolute;left:0;right:0;bottom:8%;text-align:center;pointer-events:none;display:none;padding:0 6%;">
+        <div id="caption-overlay" style="position:absolute;left:0;right:0;bottom:50%;text-align:center;pointer-events:none;display:none;padding:0 6%;">
           <span id="caption-text" style="display:inline-block;font-family:'Roboto',sans-serif;font-weight:500;color:#fff;background:rgba(0,0,0,0.65);border-radius:6px;padding:4px 14px;line-height:1.45;word-break:break-word;max-width:100%;"></span>
         </div>
       </div>
@@ -532,7 +571,9 @@ E.g.: Brand memory consistently outweighs [S2: brand memory consistently outweig
 
 // ── STATE ──────────────────────────────────────────────────────────────────────
 let slides = [], curSlide = 0;
-let captionEnabled = true, captionFontSize = 18, captionYPct = 8; // font size canvas-pts @360px ref; Y = % from bottom
+let captionEnabled = true, captionFontSize = 18, captionYPct = 50; // font size canvas-pts @360px ref; Y = % from bottom
+let wordTimings = [];   // [{word, start_ms, end_ms, segIdx}] — word-level timings aligned to segment anchors
+let karaokeEnabled = true;
 let drawing = null, isDown = false;
 let imgScale = 1, imgOffX = 0, imgOffY = 0;
 let catDragging = false;
@@ -755,6 +796,7 @@ function applyScriptLabel(cropIdx, labelObj) {
 // ── TRANSCRIPT ─────────────────────────────────────────────────────────────────
 let transcriptSegments = [];
 let geminiApiKey = '';
+let geminiFileUri = null, geminiFileMime = null; // reused by word-level call
 let audioFile = null;
 
 function onApiKeyChange() {
@@ -788,6 +830,7 @@ async function transcribeAudio() {
     const uploadData = await uploadRes.json();
     const fileUri = uploadData.file.uri;
     const mimeType = audioFile.type || 'audio/mpeg';
+    geminiFileUri = fileUri; geminiFileMime = mimeType; // keep for word-level call
     btn.textContent = '⏳ Transcribing…'; statusEl.textContent = 'Transcribing…';
     const prompt = `Transcribe this audio completely with precise timestamps.
 Return ONLY a valid JSON array — no markdown, no preamble, no explanation.
@@ -811,6 +854,7 @@ Example: [{"time":0,"text":"hello everyone"},{"time":1.8,"text":"today we will"}
     buildScriptWordAlignment(); // build global alignment now that transcript is ready
     slides.forEach(s=>{ s.crops.forEach((c,i)=>{ if(c.keyword) c.cueTime=matchKeywordFuzzy(c.keyword,i,s.crops)??matchKeywordInterpolated(c.keyword,i,s.crops)??matchKeyword(c.keyword,i,s.crops); }); });
     updateCropList();
+    startWordLevelTranscription(); // background — word-level karaoke timing
   } catch(err) {
     statusEl.className='err'; statusEl.textContent='✗ '+err.message;
     btn.textContent='⚡ Retry'; btn.disabled=false;
@@ -1224,24 +1268,49 @@ function checkAutoReveal() {
   if (autoRevealBusy) return;
   const s = slides[pSlide]; if (!s) return;
   const t = audioEl.currentTime;
+
+  // Bug fix 1: skip crops with no cue time — reveal them silently so they never stall playback
+  while (pStep < s.crops.length && s.crops[pStep].cueTime == null) {
+    pAlphas[pStep] = 1; pStep++;
+  }
+
   if (pStep < s.crops.length) {
     const c = s.crops[pStep];
-    if (c.cueTime !== null && c.cueTime !== undefined && t >= c.cueTime) {
+    if (t >= c.cueTime) {
       autoRevealBusy = true;
       const idx = pStep;
+      const capturedSlide = pSlide; // Bug fix 3: capture slide index for closure safety
       pAlphas[idx] = 0; pStep++;
       const go = () => {
+        if (pSlide !== capturedSlide) { autoRevealBusy = false; return; } // abort if user navigated away
         let v = pAlphas[idx]||0; v = Math.min(1, v+0.055); pAlphas[idx] = v;
         renderPresent();
         if (v < 1) { animId = requestAnimationFrame(go); }
         else {
           autoRevealBusy = false;
-          if (pStep >= s.crops.length && pSlide < slides.length-1) {
-            setTimeout(()=>{ if(!audioEl.paused) advanceSlide(); }, 600);
+          // Bug fix 3: use current pSlide (not stale s) to check crop count
+          if (pSlide === capturedSlide && pStep >= slides[pSlide].crops.length && pSlide < slides.length-1) {
+            setTimeout(()=>{ if(!audioEl.paused && pSlide === capturedSlide) advanceSlide(); }, 600);
           }
         }
       };
       go();
+    }
+    return; // still have crops pending on this slide
+  }
+
+  // Bug fix 2: all crops revealed — auto-advance 0-crop slides when audio reaches the next cue
+  if (s.crops.length === 0 && pSlide < slides.length - 1 && !audioEl.paused) {
+    const next = slides[pSlide + 1];
+    const nextFirstCue = next?.crops?.find(c => c.cueTime != null)?.cueTime;
+    // Advance when next slide's first cue arrives (or immediately if next slide also has no cues)
+    if (nextFirstCue == null || t >= nextFirstCue) {
+      autoRevealBusy = true;
+      const capturedSlide = pSlide;
+      setTimeout(() => {
+        autoRevealBusy = false;
+        if (pSlide === capturedSlide) advanceSlide();
+      }, 200);
     }
   }
 }
@@ -1295,9 +1364,8 @@ function loadFiles(files) {
     if (++loaded < arr.length) return;
     slides = slides.filter(Boolean);
     if (!slides.length) return;
-    curSlide = 0; globalSegIdx = 0; activeCropIdx = null; activeHlIdx = null; hlAssignTarget = null;
-    showPhase('editor');
-    setTimeout(()=>{ buildFilmstrip(); selectSlide(0); initColorPresets(); history=[]; historyIdx=-1; snapshotHistory(); }, 50);
+    showPhase('arrange');
+    buildArrangeGrid();
   }
   arr.forEach((file, i) => {
     const url = URL.createObjectURL(file);
@@ -1318,9 +1386,71 @@ function loadFiles(files) {
   });
 }
 
+// ── ARRANGE PHASE ──────────────────────────────────────────────────────────────
+function buildArrangeGrid() {
+  const grid = document.getElementById('arrange-grid');
+  grid.innerHTML = '';
+  let dragSrc = null;
+
+  slides.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'arr-thumb';
+    div.setAttribute('draggable', 'true');
+
+    const img = document.createElement('img');
+    img.src = s.thumbSrc || '';
+    div.appendChild(img);
+
+    const num = document.createElement('div');
+    num.className = 'arr-num';
+    num.textContent = String(i + 1).padStart(2, '0');
+    div.appendChild(num);
+
+    const name = document.createElement('div');
+    name.className = 'arr-name';
+    name.textContent = s.name;
+    div.appendChild(name);
+
+    div.addEventListener('dragstart', e => {
+      dragSrc = i;
+      setTimeout(() => div.classList.add('arr-dragging'), 0);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    div.addEventListener('dragend', () => {
+      div.classList.remove('arr-dragging');
+      document.querySelectorAll('.arr-thumb').forEach(el => el.classList.remove('drag-over'));
+    });
+    div.addEventListener('dragover', e => {
+      e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+      if (dragSrc !== i) div.classList.add('drag-over');
+    });
+    div.addEventListener('dragleave', () => div.classList.remove('drag-over'));
+    div.addEventListener('drop', e => {
+      e.preventDefault(); div.classList.remove('drag-over');
+      if (dragSrc === null || dragSrc === i) return;
+      const moved = slides.splice(dragSrc, 1)[0];
+      slides.splice(i, 0, moved);
+      dragSrc = null;
+      buildArrangeGrid(); // rebuild with new order
+    });
+
+    grid.appendChild(div);
+  });
+}
+
+function continueToEditor() {
+  curSlide = 0; globalSegIdx = 0;
+  activeCropIdx = null; activeHlIdx = null; hlAssignTarget = null;
+  showPhase('editor');
+  setTimeout(() => {
+    buildFilmstrip(); selectSlide(0); initColorPresets();
+    history = []; historyIdx = -1; snapshotHistory();
+  }, 50);
+}
+
 // ── PHASE ──────────────────────────────────────────────────────────────────────
 function showPhase(p) {
-  ['upload','editor','present'].forEach(id=>{document.getElementById('phase-'+id).style.display=id===p?'flex':'none';});
+  ['upload','arrange','editor','present'].forEach(id=>{document.getElementById('phase-'+id).style.display=id===p?'flex':'none';});
 }
 function goHome() {
   cancelAnimationFrame(animId);
@@ -1334,6 +1464,9 @@ function goHome() {
   document.getElementById('st-transcript').textContent='no transcript';
   document.getElementById('audio-player').classList.add('hidden');
   document.getElementById('audio-no-track').style.display='';
+  wordTimings=[]; karaokeEnabled=false; geminiFileUri=null; geminiFileMime=null;
+  const kt=document.getElementById('karaoke-toggle'); if(kt) kt.checked=false;
+  setWordTimingStatus('none');
   audioReady=false; audioFile=null; audioEl.src='';
   setMode('crop');
   showPhase('upload');
@@ -1578,6 +1711,26 @@ function renderEditor() {
       }
     });
   }
+  // Caption position preview placeholder
+  if (captionEnabled) {
+    const cfSize = Math.max(8, Math.round(captionFontSize * cw / 360));
+    ctx.save();
+    ctx.font = `500 ${cfSize}px 'Roboto', sans-serif`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const placeholderText = 'Caption will appear here';
+    const tw = ctx.measureText(placeholderText).width;
+    const boxW = tw + cfSize * 1.5, boxH = cfSize * 2;
+    const bx = (cw - boxW) / 2;
+    const bottomY = ch - (ch * captionYPct / 100);
+    const by = Math.max(0, Math.min(ch - boxH, bottomY - boxH));
+    ctx.globalAlpha = 0.45; ctx.fillStyle = '#000';
+    if (ctx.roundRect) { ctx.beginPath(); ctx.roundRect(bx, by, boxW, boxH, cfSize * 0.35); ctx.fill(); }
+    else ctx.fillRect(bx, by, boxW, boxH);
+    ctx.globalAlpha = 1; ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.fillText(placeholderText, cw / 2, by + boxH / 2);
+    ctx.restore();
+  }
+
   // 9:16 frame border — visible thin line
   ctx.strokeStyle = 'rgba(255,255,255,0.35)'; ctx.lineWidth=1.5;
   ctx.strokeRect(0.75,0.75,cw-1.5,ch-1.5);
@@ -2143,10 +2296,10 @@ function updateCaptionOverlay() {
 
   const t = audioEl.currentTime || 0;
 
-  // Find current segment: last one whose time has been reached
-  let cur = null;
+  // Find current segment + its index (needed for karaoke word lookup)
+  let cur = null, curIdx = -1;
   for (let i = transcriptSegments.length - 1; i >= 0; i--) {
-    if (transcriptSegments[i].time <= t) { cur = transcriptSegments[i]; break; }
+    if (transcriptSegments[i].time <= t) { cur = transcriptSegments[i]; curIdx = i; break; }
   }
 
   if (!cur || !cur.text.trim()) { overlay.style.display = 'none'; return; }
@@ -2159,7 +2312,27 @@ function updateCaptionOverlay() {
   overlay.style.display = '';
   overlay.style.bottom  = captionYPct + '%';
   textEl.style.fontSize = px + 'px';
-  textEl.textContent    = cur.text;
+
+  if (karaokeEnabled && wordTimings.length) {
+    // Karaoke mode: highlight the active word in #FFDE42, rest stay white
+    const tMs = t * 1000;
+    const segWords = wordTimings.filter(w => w.segIdx === curIdx);
+    if (segWords.length) {
+      // Find the most recently started word as of tMs
+      let activeIdx = -1;
+      for (let i = 0; i < segWords.length; i++) {
+        if (tMs >= segWords[i].start_ms) activeIdx = i;
+        else break;
+      }
+      textEl.innerHTML = segWords.map((w, i) =>
+        `<span style="color:${i === activeIdx ? '#FFDE42' : '#fff'}">${w.word}</span>`
+      ).join(' ');
+    } else {
+      textEl.textContent = cur.text; // no word data for this segment — plain fallback
+    }
+  } else {
+    textEl.textContent = cur.text;
+  }
 }
 
 function drawCaption(ctx, w, h) {
@@ -2216,8 +2389,114 @@ function drawCaption(ctx, w, h) {
   ctx.restore();
 }
 
+// ── KARAOKE — word-level highlight ────────────────────────────────────────────
+function setWordTimingStatus(status) {
+  const el = document.getElementById('word-timing-status');
+  const kl = document.getElementById('karaoke-label');
+  if (!el) return;
+  if (status === 'loading') {
+    el.textContent = '⏳ word sync loading…'; el.style.color = 'var(--amber)'; el.style.display = '';
+    if (kl) kl.style.color = 'var(--amber)';
+  } else if (status === 'ready') {
+    el.textContent = '✦ word sync ready'; el.style.color = 'var(--green)'; el.style.display = '';
+    if (kl) kl.style.color = '#FFDE42';
+  } else if (status === 'error') {
+    el.textContent = '✗ word sync failed'; el.style.color = 'var(--red)'; el.style.display = '';
+    if (kl) kl.style.color = '#555';
+  } else {
+    el.style.display = 'none';
+    if (kl) kl.style.color = '#555';
+  }
+}
+
+// Positionally match Gemini word timings to our segment words, then
+// anchor each chunk's times to the reliable segment-level timestamps.
+function alignWordTimingsToSegments(rawWords) {
+  const result = [];
+  let rawCursor = 0;
+  for (let segIdx = 0; segIdx < transcriptSegments.length; segIdx++) {
+    const seg = transcriptSegments[segIdx];
+    const nextSeg = transcriptSegments[segIdx + 1];
+    const segStartMs = Math.round(seg.time * 1000);
+    const segEndMs   = nextSeg ? Math.round(nextSeg.time * 1000) : segStartMs + 4000;
+    const segWords   = seg.text.trim().split(/\s+/).filter(Boolean);
+    if (!segWords.length) continue;
+
+    const chunk = rawWords.slice(rawCursor, rawCursor + segWords.length);
+    rawCursor += segWords.length;
+
+    if (!chunk.length) {
+      // Fallback: distribute evenly across segment window
+      segWords.forEach((w, i) => {
+        const ratio = segWords.length > 1 ? i / (segWords.length - 1) : 0;
+        const s = Math.round(segStartMs + ratio * (segEndMs - segStartMs));
+        const dur = Math.round((segEndMs - segStartMs) / segWords.length);
+        result.push({word: w, start_ms: s, end_ms: Math.min(s + dur, segEndMs), segIdx});
+      });
+    } else {
+      // Scale chunk's raw times to fit our [segStartMs, segEndMs] anchor window
+      const chunkStart = chunk[0].start_ms;
+      const chunkEnd   = chunk[chunk.length - 1].end_ms;
+      const chunkSpan  = Math.max(chunkEnd - chunkStart, 1);
+      const targetSpan = segEndMs - segStartMs;
+      chunk.forEach((rw, i) => {
+        const s = Math.round(segStartMs + (rw.start_ms - chunkStart) / chunkSpan * targetSpan);
+        const e = Math.round(segStartMs + (rw.end_ms   - chunkStart) / chunkSpan * targetSpan);
+        result.push({
+          word:     segWords[i] || rw.word,
+          start_ms: Math.max(segStartMs, s),
+          end_ms:   Math.min(segEndMs,   Math.max(s + 50, e)),
+          segIdx
+        });
+      });
+    }
+  }
+  return result;
+}
+
+// Called automatically in the background after normal segment transcription.
+// Re-uses the Gemini file URI so no re-upload is needed.
+async function startWordLevelTranscription() {
+  if (!geminiApiKey || !geminiFileUri || !transcriptSegments.length) return;
+  setWordTimingStatus('loading');
+  try {
+    const prompt = `Transcribe this audio with precise word-level timestamps in milliseconds.
+Return ONLY a valid JSON array — no markdown, no explanation.
+Each element: {"word": "<single word>", "start_ms": <integer ms>, "end_ms": <integer ms>}
+Include ALL spoken words in order.
+Example: [{"word":"hello","start_ms":320,"end_ms":580},{"word":"world","start_ms":600,"end_ms":850}]`;
+    const genRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,
+      { method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          contents: [{parts: [{text: prompt}, {fileData: {mimeType: geminiFileMime, fileUri: geminiFileUri}}]}],
+          generationConfig: {temperature: 0}
+        })
+      }
+    );
+    if (!genRes.ok) throw new Error('Word-level generation failed');
+    const genData = await genRes.json();
+    const rawText = genData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const cleaned = rawText.replace(/```json|```/g, '').trim();
+    const parsed  = JSON.parse(cleaned);
+    if (!Array.isArray(parsed) || !parsed.length) throw new Error('No words returned');
+    // Normalize field names (Gemini may return start/end in seconds sometimes)
+    const normalized = parsed.map(w => ({
+      word:     String(w.word || ''),
+      start_ms: typeof w.start_ms === 'number' ? w.start_ms : Math.round((w.start || 0) * 1000),
+      end_ms:   typeof w.end_ms   === 'number' ? w.end_ms   : Math.round((w.end   || 0) * 1000)
+    }));
+    wordTimings = alignWordTimingsToSegments(normalized);
+    setWordTimingStatus('ready');
+  } catch(e) {
+    console.error('Word-level transcription:', e);
+    setWordTimingStatus('error');
+  }
+}
+
 function renderPresent(){
   const s=slides[pSlide];
+  if(!s) return; // Bug fix 4: guard against out-of-range pSlide
   const canvas=document.getElementById('present-canvas');
   if(canvas.width!==pCW||canvas.height!==pCH){canvas.width=pCW;canvas.height=pCH;}
   const ctx=canvas.getContext('2d');
@@ -2494,7 +2773,7 @@ async function saveProject() {
     }));
     const proj = {
       version: 1, savedAt: new Date().toISOString(),
-      catScale, transcriptSegments, scriptMap,
+      catScale, transcriptSegments, scriptMap, wordTimings,
       catNames: catImages.map(c => c.name),
       slides: projectSlides
     };
@@ -2537,6 +2816,8 @@ async function loadProject(file) {
 
     transcriptSegments = proj.transcriptSegments || [];
     scriptMap = proj.scriptMap || {};
+    wordTimings = proj.wordTimings || [];
+    if (wordTimings.length) setTimeout(() => setWordTimingStatus('ready'), 100);
     catScale = proj.catScale || 17;
     document.getElementById('cat-scale-input').value = catScale;
     curSlide = 0; activeCropIdx = null; activeHlIdx = null;
