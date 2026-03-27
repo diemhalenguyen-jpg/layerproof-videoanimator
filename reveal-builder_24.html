@@ -295,6 +295,55 @@
   ::-webkit-scrollbar-track{background:transparent;}
   ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 
+  /* AI UPLOAD AREA */
+  #ai-upload-area{display:none;flex-direction:column;gap:10px;width:420px;}
+  .ai-req-row{display:flex;align-items:center;gap:8px;}
+  .ai-req-label{font-family:var(--font-ui);font-size:11px;color:var(--muted);min-width:60px;flex-shrink:0;}
+  .ai-status-dot{width:7px;height:7px;border-radius:50%;background:var(--border2);flex-shrink:0;transition:background 0.2s;}
+  .ai-status-dot.ready{background:var(--green);}
+
+  /* AI WIZARD PHASE */
+  #phase-ai-wizard{flex:1;display:none;flex-direction:column;min-height:0;}
+  .wizard-bar{display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:52px;border-bottom:1px solid var(--border);flex-shrink:0;gap:16px;}
+  .wizard-bar-center{text-align:center;flex:1;}
+  .wizard-bar-title{font-family:var(--font-ui);font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;}
+  .wizard-bar-sub{font-family:var(--font-ui);font-size:10px;color:var(--dim);}
+  .wizard-body{flex:1;display:flex;min-height:0;overflow:hidden;}
+  .wizard-canvas-area{flex:1;display:flex;align-items:center;justify-content:center;background:#050505;padding:12px;}
+  #wizard-canvas{display:block;}
+  .wizard-info{width:270px;flex-shrink:0;border-left:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;}
+  .wizard-seg-box{padding:12px 14px 10px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .wizard-section-label{font-family:var(--font-ui);font-size:9px;letter-spacing:1px;color:var(--dim);margin-bottom:5px;text-transform:uppercase;}
+  .wizard-seg-time{font-size:10px;color:var(--amber);font-weight:600;margin-bottom:4px;font-family:var(--font);}
+  .wizard-seg-text{font-family:var(--font-ui);font-size:13px;color:var(--text);line-height:1.55;}
+  .wizard-reason-box{padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .wizard-reason-text{font-family:var(--font-ui);font-size:10px;color:var(--g8);line-height:1.5;font-style:italic;}
+  .wizard-img-box{padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .wizard-img-name{font-family:var(--font-ui);font-size:10px;color:var(--muted);}
+  .wizard-gap-box{padding:10px 14px;border-bottom:1px solid var(--border);background:rgba(245,158,11,0.04);flex-shrink:0;}
+  .wizard-gap-label{font-family:var(--font-ui);font-size:9px;letter-spacing:1px;color:var(--amber);margin-bottom:6px;text-transform:uppercase;}
+  .wizard-gap-item{font-family:var(--font-ui);font-size:9px;color:var(--g8);padding:2px 0;line-height:1.4;}
+  .wizard-spacer{flex:1;}
+  .wizard-controls{padding:12px 14px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:7px;flex-shrink:0;}
+  .wizard-ctrl-row{display:flex;gap:5px;}
+  .wizard-hint{font-family:var(--font-ui);font-size:9px;color:var(--dim);text-align:center;}
+  .wizard-conf-badge{display:inline-block;font-family:var(--font-ui);font-size:8px;letter-spacing:0.5px;padding:2px 6px;border-radius:3px;margin-bottom:6px;}
+  .wizard-conf-badge.high{background:rgba(34,197,94,0.12);color:var(--green);}
+  .wizard-conf-badge.medium{background:rgba(245,158,11,0.12);color:var(--amber);}
+  .wizard-conf-badge.low{background:rgba(239,68,68,0.12);color:var(--red);}
+  .wizard-alt-badge{font-family:var(--font-ui);font-size:9px;color:var(--indigo);padding:3px 8px;background:rgba(99,102,241,0.08);border-radius:3px;margin-bottom:5px;display:inline-block;}
+  .wizard-needs-box{padding:10px 14px;border-bottom:1px solid var(--border);background:rgba(239,68,68,0.04);flex-shrink:0;}
+  .wizard-needs-label{font-family:var(--font-ui);font-size:9px;letter-spacing:1px;color:var(--red);margin-bottom:6px;text-transform:uppercase;}
+  .wizard-needs-hint{font-family:var(--font-ui);font-size:10px;color:var(--g8);line-height:1.5;font-style:italic;margin-top:4px;}
+  /* Picker area */
+  #wizard-picker-area{flex:1;display:none;flex-direction:column;overflow:hidden;background:#080808;padding:16px;gap:12px;}
+  #wizard-picker-grid{flex:1;overflow-y:auto;display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start;}
+  .wz-pick-thumb{width:90px;border-radius:6px;overflow:hidden;cursor:pointer;border:2px solid var(--border);background:#111;transition:border-color 0.12s,transform 0.1s;flex-shrink:0;}
+  .wz-pick-thumb:hover{border-color:var(--g6);transform:translateY(-1px);}
+  .wz-pick-thumb.selected{border-color:var(--amber);}
+  .wz-pick-thumb img{width:100%;aspect-ratio:9/16;object-fit:cover;display:block;pointer-events:none;}
+  .wz-pick-name{font-family:var(--font-ui);font-size:8px;color:var(--dim);padding:3px 5px;background:var(--surface);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
 </style>
 </head>
 <body>
@@ -306,6 +355,7 @@
     <div style="display:flex;gap:8px;margin-bottom:-10px;">
       <button class="upload-mode-btn active" id="btn-mode-manual" onclick="setUploadMode('manual')">Manual</button>
       <button class="upload-mode-btn" id="btn-mode-script" onclick="setUploadMode('script')">Script mode</button>
+      <button class="upload-mode-btn" id="btn-mode-ai" onclick="setUploadMode('ai')" title="AI Auto: Gemini maps images to transcript automatically">✦ AI Auto</button>
     </div>
     <label id="dropzone">
       <input type="file" id="file-input" accept="image/*" multiple style="display:none">
@@ -319,12 +369,33 @@
     <button id="btn-load" onclick="triggerLoad()" disabled
       style="font-family:var(--font);font-size:13px;padding:10px 32px;border-radius:var(--radius);border:1px solid var(--green-dim);background:var(--green-bg);color:var(--green);cursor:pointer;opacity:0.4;transition:all 0.15s;"
       title="Load images and start editing">Load →</button>
+    <label style="font-family:var(--font-ui);font-size:10px;color:var(--muted);cursor:pointer;text-decoration:underline;text-underline-offset:3px;">
+      Open saved project
+      <input type="file" accept=".json" style="display:none" onchange="if(this.files[0])loadProject(this.files[0]);this.value='';">
+    </label>
     <div id="script-area" style="display:none;flex-direction:column;gap:8px;width:420px;">
       <p style="font-size:11px;color:var(--dim);line-height:1.6;">Paste your script with <code style="color:var(--amber);font-size:10px;">[S2: phrase to find]</code> tags — the tag text is the exact phrase to match in the transcript. Slide numbers map to image filenames (1.png → S1, etc.).</p>
       <textarea id="script-input" oninput="updateLoadBtn()" placeholder="Paste script here…
 E.g.: Brand memory consistently outweighs [S2: brand memory consistently outweighs] product quality…" style="font-family:var(--font);font-size:11px;width:100%;height:140px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);padding:10px;outline:none;resize:vertical;line-height:1.6;"></textarea>
     </div>
-    <p class="order-note">Files named by number (1.png, 2.png…) map to S1, S2… in script mode.</p>
+    <div id="ai-upload-area">
+      <div class="ai-req-row">
+        <span class="ai-req-label">Gemini key</span>
+        <input type="password" id="ai-gemini-key" class="api-key-input" placeholder="AIza…" style="flex:1;"
+          oninput="geminiApiKey=this.value.trim();document.getElementById('gemini-key-input').value=this.value;onApiKeyChange();document.getElementById('ai-key-dot').classList.toggle('ready',this.value.trim().length>10);updateLoadBtn();try{if(geminiApiKey.length>10)localStorage.setItem('reveal_gemini_key',geminiApiKey);}catch(e){}">
+        <span class="ai-status-dot" id="ai-key-dot"></span>
+      </div>
+      <div class="ai-req-row">
+        <span class="ai-req-label">Audio</span>
+        <label class="btn btn-sm" style="position:relative;overflow:hidden;flex:1;text-align:center;cursor:pointer;">
+          <span id="ai-audio-label">Upload voiceover ♪</span>
+          <input type="file" accept="audio/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0;" onchange="onAiAudioUpload(this.files[0])">
+        </label>
+        <span class="ai-status-dot" id="ai-audio-dot"></span>
+      </div>
+      <p style="font-size:10px;color:var(--dim);line-height:1.6;margin-top:2px;">Gemini reads your transcript and all images together, then suggests which part of which image to show at each moment. You review each suggestion and accept or skip.</p>
+    </div>
+    <p class="order-note" id="order-note">Files named by number (1.png, 2.png…) map to S1, S2… in script mode.</p>
   </div>
 
   <div id="phase-arrange">
@@ -337,6 +408,68 @@ E.g.: Brand memory consistently outweighs [S2: brand memory consistently outweig
       <button class="btn btn-sm btn-green" onclick="continueToEditor()">Continue to editor →</button>
     </div>
     <div id="arrange-grid"></div>
+  </div>
+
+  <div id="phase-ai-wizard">
+    <div class="wizard-bar">
+      <button class="btn btn-sm" onclick="wizardGoBack()">← Back</button>
+      <div class="wizard-bar-center">
+        <div class="wizard-bar-title" id="wizard-bar-title">AI Storyboard Review</div>
+        <div class="wizard-bar-sub" id="wizard-bar-sub">Step through each suggestion — accept, adjust crop, or skip</div>
+      </div>
+      <button class="btn btn-sm btn-green" id="wizard-done-btn" onclick="finishWizard()" style="display:none;">Continue to editor →</button>
+    </div>
+    <div class="wizard-body">
+      <div class="wizard-canvas-area" id="wizard-canvas-area">
+        <canvas id="wizard-canvas"></canvas>
+      </div>
+      <div id="wizard-picker-area">
+        <div style="font-family:var(--font-ui);font-size:11px;color:var(--muted);flex-shrink:0;">Choose a different image for this segment — or upload a new one:</div>
+        <div id="wizard-picker-grid"></div>
+        <div style="display:flex;gap:8px;flex-shrink:0;align-items:center;">
+          <label class="btn btn-sm" style="cursor:pointer;position:relative;overflow:hidden;">
+            + Add new image
+            <input type="file" accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0;" onchange="wzPickerUpload(this.files[0]);this.value='';">
+          </label>
+          <button class="btn btn-sm" onclick="wizardTrulySkip()" style="margin-left:auto;color:var(--dim);">Skip segment →</button>
+        </div>
+      </div>
+      <div class="wizard-info">
+        <div class="wizard-seg-box">
+          <div class="wizard-section-label">Transcript segment</div>
+          <div class="wizard-seg-time" id="wizard-seg-time">—</div>
+          <div class="wizard-seg-text" id="wizard-seg-text">—</div>
+        </div>
+        <div class="wizard-reason-box">
+          <div class="wizard-section-label">AI reasoning</div>
+          <div id="wizard-conf-wrap" style="margin-bottom:4px;"></div>
+          <div id="wizard-alt-wrap" style="margin-bottom:4px;display:none;"></div>
+          <div class="wizard-reason-text" id="wizard-reason">—</div>
+        </div>
+        <div class="wizard-img-box">
+          <div class="wizard-section-label">Image</div>
+          <div class="wizard-img-name" id="wizard-img-name">—</div>
+        </div>
+        <div id="wizard-needs-box" style="display:none;" class="wizard-needs-box">
+          <div class="wizard-needs-label">⚠ More images may help</div>
+          <div class="wizard-needs-hint" id="wizard-needs-hint"></div>
+        </div>
+        <div id="wizard-gap-box" style="display:none;" class="wizard-gap-box">
+          <div class="wizard-gap-label">⚠ Segments without a suggestion</div>
+          <div id="wizard-gap-list"></div>
+        </div>
+        <div class="wizard-spacer"></div>
+        <div class="wizard-controls">
+          <div class="wizard-ctrl-row">
+            <button class="btn btn-sm" onclick="wizardStepBack()" id="wizard-prev-btn" style="flex:1;" disabled>← Prev</button>
+            <button class="btn btn-sm" onclick="wizardSameAsPrev()" id="wizard-sameprev-btn" style="flex:1;" disabled>Same as prev</button>
+            <button class="btn btn-sm btn-amber" onclick="wizardNotThis()" id="wizard-notthis-btn" style="flex:1;">Not this →</button>
+            <button class="btn btn-sm btn-green" onclick="wizardAccept()" id="wizard-accept-btn" style="flex:1;">✓ Accept</button>
+          </div>
+          <div class="wizard-hint" id="wizard-hint-text">Drag the amber box to adjust • drag corners to resize</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div id="phase-editor">
@@ -458,9 +591,9 @@ E.g.: Brand memory consistently outweighs [S2: brand memory consistently outweig
           </div>
           <div class="img-adjust-row">
             <span class="img-adjust-label">Position</span>
-            <input type="range" id="caption-y-slider" min="2" max="95" value="50" step="1"
+            <input type="range" id="caption-y-slider" min="2" max="95" value="25" step="1"
               oninput="captionYPct=+this.value;document.getElementById('caption-y-num').value=this.value;renderEditor();updateCaptionOverlay();">
-            <input type="number" id="caption-y-num" min="2" max="95" value="50" step="1"
+            <input type="number" id="caption-y-num" min="2" max="95" value="25" step="1"
               style="font-family:var(--font);font-size:9px;width:38px;background:var(--bg);border:1px solid var(--border2);border-radius:3px;color:var(--text);padding:2px 3px;outline:none;text-align:center;"
               oninput="const v=Math.max(2,Math.min(95,+this.value||50));captionYPct=v;document.getElementById('caption-y-slider').value=v;renderEditor();updateCaptionOverlay();">
           </div>
@@ -571,7 +704,17 @@ E.g.: Brand memory consistently outweighs [S2: brand memory consistently outweig
 
 // ── STATE ──────────────────────────────────────────────────────────────────────
 let slides = [], curSlide = 0;
-let captionEnabled = true, captionFontSize = 18, captionYPct = 50; // font size canvas-pts @360px ref; Y = % from bottom
+
+// ── AI WIZARD STATE ─────────────────────────────────────────────────────────────
+let imageLibrary = [];          // [{img, offscreen, thumbSrc, name, bgColor, exposure, blackPoint, adjustedOffscreen}]
+let aiWizardEntries = [];       // [{imageIndex, segmentIndex, region:{x,y,w,h}, showFull, reason, accepted}]
+let wizardIdx = 0;
+let wizardAcceptedReveals = []; // [{imageIndex, segmentIndex, region, showFull}]
+let wzDragMode = null;          // null | 'move' | 'tl' | 'tr' | 'bl' | 'br'
+let wzDragStart = null;         // {mx, my, origRegion, lay}
+let wzCurrentRegion = null;     // {x,y,w,h} normalized 0-1 of image dims, being adjusted
+let wzSuggestionStep = 0;       // 0=primary, 1=alternative, 2=picker
+let captionEnabled = true, captionFontSize = 18, captionYPct = 25; // font size canvas-pts @360px ref; Y = % from bottom (25 = 3/4 down frame)
 let wordTimings = [];   // [{word, start_ms, end_ms, segIdx}] — word-level timings aligned to segment anchors
 let karaokeEnabled = true;
 let drawing = null, isDown = false;
@@ -647,7 +790,11 @@ function setUploadMode(mode) {
   uploadMode = mode;
   document.getElementById('btn-mode-manual').classList.toggle('active', mode==='manual');
   document.getElementById('btn-mode-script').classList.toggle('active', mode==='script');
+  document.getElementById('btn-mode-ai').classList.toggle('active', mode==='ai');
   document.getElementById('script-area').style.display = mode==='script' ? 'flex' : 'none';
+  document.getElementById('ai-upload-area').style.display = mode==='ai' ? 'flex' : 'none';
+  document.getElementById('order-note').style.display = mode==='ai' ? 'none' : '';
+  updateLoadBtn();
 }
 
 function parseScript(text) {
@@ -808,10 +955,32 @@ function saveApiKey() {
   try { localStorage.setItem('reveal_gemini_key', geminiApiKey); const b=document.getElementById('btn-save-key');b.textContent='✓';setTimeout(()=>{b.textContent='💾';},1400); } catch(e){}
 }
 function loadSavedKey() {
-  try { const k=localStorage.getItem('reveal_gemini_key'); if(k&&k.length>10){geminiApiKey=k;const i=document.getElementById('gemini-key-input');i.value=k;i.classList.add('has-key');updateTranscribeBtn();} } catch(e){}
+  try {
+    const k=localStorage.getItem('reveal_gemini_key');
+    if(k&&k.length>10){
+      geminiApiKey=k;
+      const i=document.getElementById('gemini-key-input'); i.value=k; i.classList.add('has-key');
+      const a=document.getElementById('ai-gemini-key'); if(a){a.value=k; document.getElementById('ai-key-dot').classList.add('ready');}
+      updateTranscribeBtn(); updateLoadBtn();
+    }
+  } catch(e){}
 }
 function updateTranscribeBtn() {
   document.getElementById('btn-transcribe').disabled = !(geminiApiKey.length > 10 && audioReady);
+}
+function checkTimestampMismatch() {
+  // Silently auto-scale timestamps if audio duration doesn't match transcript span
+  if (!audioReady || !transcriptSegments.length) return;
+  const audioDur = audioEl.duration;
+  if (!audioDur || audioDur < 5 || !isFinite(audioDur)) return;
+  const lastSeg = transcriptSegments[transcriptSegments.length - 1].time;
+  const ratio = audioDur / (lastSeg + 0.5);
+  if (ratio < 1.15 && ratio > 0.87) return; // within 15% — looks fine
+  transcriptSegments = transcriptSegments.map(s => ({...s, time: +(s.time * ratio).toFixed(3)}));
+  wordTimings = wordTimings.map(w => ({...w, start_ms: Math.round(w.start_ms * ratio), end_ms: Math.round(w.end_ms * ratio)}));
+  slides.forEach(s => s.crops.forEach(c => { if (c.cueTime != null) c.cueTime = +(c.cueTime * ratio).toFixed(3); }));
+  renderTranscriptList();
+  updateCropList();
 }
 
 async function transcribeAudio() {
@@ -832,13 +1001,15 @@ async function transcribeAudio() {
     const mimeType = audioFile.type || 'audio/mpeg';
     geminiFileUri = fileUri; geminiFileMime = mimeType; // keep for word-level call
     btn.textContent = '⏳ Transcribing…'; statusEl.textContent = 'Transcribing…';
+    const audioDuration = audioEl.duration && isFinite(audioEl.duration) ? audioEl.duration.toFixed(2) : null;
+    const durHint = audioDuration ? `\nThe audio is exactly ${audioDuration} seconds long — your timestamps MUST span this full duration accurately.` : '';
     const prompt = `Transcribe this audio completely with precise timestamps.
 Return ONLY a valid JSON array — no markdown, no preamble, no explanation.
 Each element: {"time": <number seconds>, "text": "<transcript text>"}
 IMPORTANT: Break into very short segments of maximum 6 words each. Each segment should be a natural phrase break.
-Be precise with time values as floating point seconds.
+Be precise with time values as floating point seconds. Timestamps must match the real audio playback position.${durHint}
 Example: [{"time":0,"text":"hello everyone"},{"time":1.8,"text":"today we will"},{"time":3.1,"text":"discuss three topics"}]`;
-    const genRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt},{fileData:{mimeType,fileUri}}]}],generationConfig:{temperature:0}})});
+    const genRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${geminiApiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:prompt},{fileData:{mimeType,fileUri}}]}],generationConfig:{temperature:0}})});
     if (!genRes.ok) { const e=await genRes.json(); throw new Error(e.error?.message||'Generation failed'); }
     const genData = await genRes.json();
     const rawText = genData.candidates?.[0]?.content?.parts?.[0]?.text || '';
@@ -846,6 +1017,15 @@ Example: [{"time":0,"text":"hello everyone"},{"time":1.8,"text":"today we will"}
     const parsed = JSON.parse(cleaned);
     if (!Array.isArray(parsed)) throw new Error('Unexpected format');
     transcriptSegments = parsed.map(s=>({time:typeof s.time==='number'?s.time:parseFloat(s.time)||0,text:String(s.text||'').toLowerCase()})).sort((a,b)=>a.time-b.time);
+    // Auto-scale if Gemini returned compressed timestamps (common with longer audio)
+    if (audioDuration && transcriptSegments.length > 1) {
+      const lastT = transcriptSegments[transcriptSegments.length - 1].time;
+      const expectedEnd = parseFloat(audioDuration);
+      const ratio = expectedEnd / (lastT + 0.5); // +0.5s trailing silence estimate
+      if (ratio > 1.15 || ratio < 0.87) {
+        transcriptSegments = transcriptSegments.map(s => ({...s, time: +(s.time * ratio).toFixed(3)}));
+      }
+    }
     statusEl.className='ok'; statusEl.textContent=`✓ ${transcriptSegments.length} segs`;
     document.getElementById('st-transcript').textContent=`${transcriptSegments.length} segs`;
     btn.textContent='✓ Done';
@@ -854,6 +1034,7 @@ Example: [{"time":0,"text":"hello everyone"},{"time":1.8,"text":"today we will"}
     buildScriptWordAlignment(); // build global alignment now that transcript is ready
     slides.forEach(s=>{ s.crops.forEach((c,i)=>{ if(c.keyword) c.cueTime=matchKeywordFuzzy(c.keyword,i,s.crops)??matchKeywordInterpolated(c.keyword,i,s.crops)??matchKeyword(c.keyword,i,s.crops); }); });
     updateCropList();
+    checkTimestampMismatch();
     startWordLevelTranscription(); // background — word-level karaoke timing
   } catch(err) {
     statusEl.className='err'; statusEl.textContent='✗ '+err.message;
@@ -1231,7 +1412,7 @@ document.getElementById('audio-file-input').addEventListener('change', function(
   document.getElementById('audio-name').textContent = file.name.replace(/\.[^.]+$/,'');
   document.getElementById('audio-player').classList.remove('hidden');
   document.getElementById('audio-no-track').style.display = 'none';
-  audioEl.addEventListener('loadedmetadata', updateAudioUI);
+  audioEl.addEventListener('loadedmetadata', () => { updateAudioUI(); checkTimestampMismatch(); });
   updateTranscribeBtn();
 });
 audioEl.addEventListener('timeupdate', ()=>{
@@ -1269,7 +1450,7 @@ function checkAutoReveal() {
   const s = slides[pSlide]; if (!s) return;
   const t = audioEl.currentTime;
 
-  // Bug fix 1: skip crops with no cue time — reveal them silently so they never stall playback
+  // Skip crops with no cue time — reveal them silently so they never stall playback
   while (pStep < s.crops.length && s.crops[pStep].cueTime == null) {
     pAlphas[pStep] = 1; pStep++;
   }
@@ -1279,38 +1460,31 @@ function checkAutoReveal() {
     if (t >= c.cueTime) {
       autoRevealBusy = true;
       const idx = pStep;
-      const capturedSlide = pSlide; // Bug fix 3: capture slide index for closure safety
+      const capturedSlide = pSlide;
       pAlphas[idx] = 0; pStep++;
       const go = () => {
-        if (pSlide !== capturedSlide) { autoRevealBusy = false; return; } // abort if user navigated away
+        if (pSlide !== capturedSlide) { autoRevealBusy = false; return; }
         let v = pAlphas[idx]||0; v = Math.min(1, v+0.055); pAlphas[idx] = v;
         renderPresent();
         if (v < 1) { animId = requestAnimationFrame(go); }
-        else {
-          autoRevealBusy = false;
-          // Bug fix 3: use current pSlide (not stale s) to check crop count
-          if (pSlide === capturedSlide && pStep >= slides[pSlide].crops.length && pSlide < slides.length-1) {
-            setTimeout(()=>{ if(!audioEl.paused && pSlide === capturedSlide) advanceSlide(); }, 600);
-          }
-        }
+        else { autoRevealBusy = false; }
       };
       go();
     }
     return; // still have crops pending on this slide
   }
 
-  // Bug fix 2: all crops revealed — auto-advance 0-crop slides when audio reaches the next cue
-  if (s.crops.length === 0 && pSlide < slides.length - 1 && !audioEl.paused) {
+  // All crops revealed (or empty slide) — advance to next slide when its first cue arrives
+  if (pSlide < slides.length - 1 && !audioEl.paused) {
     const next = slides[pSlide + 1];
     const nextFirstCue = next?.crops?.find(c => c.cueTime != null)?.cueTime;
-    // Advance when next slide's first cue arrives (or immediately if next slide also has no cues)
     if (nextFirstCue == null || t >= nextFirstCue) {
       autoRevealBusy = true;
       const capturedSlide = pSlide;
       setTimeout(() => {
         autoRevealBusy = false;
         if (pSlide === capturedSlide) advanceSlide();
-      }, 200);
+      }, 50);
     }
   }
 }
@@ -1335,17 +1509,30 @@ function updateLoadBtn() {
   const mainTxt = document.getElementById('dz-main-txt');
   const subTxt = document.getElementById('dz-sub-txt');
   const n = pendingFiles ? pendingFiles.length : 0;
-  const scriptOk = uploadMode === 'manual' || document.getElementById('script-input').value.trim().length > 20;
-  const ready = n > 0 && scriptOk;
+  let ready = false;
+  let subMsg = 'Ready — click Load →';
+  if (uploadMode === 'manual') {
+    ready = n > 0;
+  } else if (uploadMode === 'script') {
+    const scriptOk = document.getElementById('script-input').value.trim().length > 20;
+    ready = n > 0 && scriptOk;
+    if (!scriptOk) subMsg = 'Paste your script below first';
+  } else if (uploadMode === 'ai') {
+    const keyOk = geminiApiKey.length > 10;
+    ready = n > 0 && audioReady && keyOk;
+    if (!keyOk) subMsg = 'Enter Gemini key above';
+    else if (!audioReady) subMsg = 'Upload audio above first';
+  }
   if (btn) { btn.disabled = !ready; btn.style.opacity = ready ? '1' : '0.4'; btn.style.cursor = ready ? 'pointer' : 'not-allowed'; }
   if (n > 0) {
     if (mainTxt) mainTxt.textContent = n + ' image' + (n>1?'s':'') + ' selected ✓';
-    if (subTxt) subTxt.textContent = uploadMode==='script' && !scriptOk ? 'Paste your script below first' : 'Ready — click Load →';
+    if (subTxt) subTxt.textContent = subMsg;
   }
 }
 
 function triggerLoad() {
   if (!pendingFiles || pendingFiles.length === 0) return;
+  if (uploadMode === 'ai') { runAiFlow(pendingFiles); return; }
   loadFiles(pendingFiles);
 }
 
@@ -1450,13 +1637,18 @@ function continueToEditor() {
 
 // ── PHASE ──────────────────────────────────────────────────────────────────────
 function showPhase(p) {
-  ['upload','arrange','editor','present'].forEach(id=>{document.getElementById('phase-'+id).style.display=id===p?'flex':'none';});
+  ['upload','arrange','ai-wizard','editor','present'].forEach(id=>{
+    const el=document.getElementById('phase-'+id); if(el) el.style.display=id===p?'flex':'none';
+  });
 }
 function goHome() {
   cancelAnimationFrame(animId);
   slides=[]; curSlide=0; pCW=0; globalSegIdx=0;
   activeCropIdx=null; activeHlIdx=null; hlAssignTarget=null;
   transcriptSegments=[];
+  // Reset AI wizard state
+  imageLibrary=[]; aiWizardEntries=[]; wizardAcceptedReveals=[]; wizardIdx=0;
+  wzDragMode=null; wzDragStart=null; wzCurrentRegion=null;
   document.getElementById('file-input').value='';
   document.getElementById('transcript-section').classList.remove('visible');
   document.getElementById('transcript-status').className='';
@@ -1466,6 +1658,9 @@ function goHome() {
   document.getElementById('audio-no-track').style.display='';
   wordTimings=[]; karaokeEnabled=false; geminiFileUri=null; geminiFileMime=null;
   const kt=document.getElementById('karaoke-toggle'); if(kt) kt.checked=false;
+  const aal=document.getElementById('ai-audio-label'); if(aal) aal.textContent='Upload voiceover ♪';
+  const aad=document.getElementById('ai-audio-dot'); if(aad) aad.classList.remove('ready');
+  const akd=document.getElementById('ai-key-dot'); if(akd) akd.classList.remove('ready');
   setWordTimingStatus('none');
   audioReady=false; audioFile=null; audioEl.src='';
   setMode('crop');
@@ -2204,6 +2399,7 @@ window.addEventListener('mouseup', () => {
 window.addEventListener('resize', ()=>{
   if(document.getElementById('phase-editor').style.display!=='none') renderEditor();
   if(document.getElementById('phase-present').style.display!=='none'){pCW=0;initPresentCanvas();renderPresent();}
+  if(document.getElementById('phase-ai-wizard').style.display!=='none') renderWizardCanvas();
 });
 
 // ── AUTO-MATCH ──────────────────────────────────────────────────────────────────
@@ -2466,7 +2662,7 @@ Each element: {"word": "<single word>", "start_ms": <integer ms>, "end_ms": <int
 Include ALL spoken words in order.
 Example: [{"word":"hello","start_ms":320,"end_ms":580},{"word":"world","start_ms":600,"end_ms":850}]`;
     const genRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${geminiApiKey}`,
       { method: 'POST', headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           contents: [{parts: [{text: prompt}, {fileData: {mimeType: geminiFileMime, fileUri: geminiFileUri}}]}],
@@ -2818,6 +3014,7 @@ async function loadProject(file) {
     scriptMap = proj.scriptMap || {};
     wordTimings = proj.wordTimings || [];
     if (wordTimings.length) setTimeout(() => setWordTimingStatus('ready'), 100);
+    setTimeout(() => checkTimestampMismatch(), 200);
     catScale = proj.catScale || 17;
     document.getElementById('cat-scale-input').value = catScale;
     curSlide = 0; activeCropIdx = null; activeHlIdx = null;
@@ -2838,6 +3035,657 @@ async function loadProject(file) {
       }
     }, 50);
   } catch(e) { alert('Failed to load project: ' + e.message); }
+}
+
+// ── AI AUTO MODE ───────────────────────────────────────────────────────────────
+
+function onAiAudioUpload(file) {
+  if (!file) return;
+  audioFile = file;
+  const url = URL.createObjectURL(file);
+  audioEl.src = url; audioEl.load(); audioReady = true;
+  document.getElementById('audio-name').textContent = file.name.replace(/\.[^.]+$/,'');
+  document.getElementById('audio-player').classList.remove('hidden');
+  document.getElementById('audio-no-track').style.display = 'none';
+  document.getElementById('ai-audio-label').textContent = '✓ ' + file.name.replace(/\.[^.]+$/,'');
+  document.getElementById('ai-audio-dot').classList.add('ready');
+  audioEl.addEventListener('loadedmetadata', updateAudioUI);
+  updateTranscribeBtn();
+  updateLoadBtn();
+}
+
+async function runAiFlow(files) {
+  const btn = document.getElementById('btn-load');
+  btn.disabled = true; btn.textContent = '⏳ Loading images…';
+  try {
+    const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
+    if (!arr.length) return;
+    arr.sort((a,b) => a.name.localeCompare(b.name, undefined, {numeric:true}));
+    imageLibrary = await Promise.all(arr.map(file => new Promise(res => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const off = document.createElement('canvas');
+          off.width = img.naturalWidth; off.height = img.naturalHeight;
+          off.getContext('2d').drawImage(img, 0, 0);
+          URL.revokeObjectURL(url);
+          res({img, offscreen:off, thumbSrc:makeThumb(off), name:file.name, bgColor:'#000000', exposure:0, blackPoint:0, adjustedOffscreen:null});
+        } catch(e) { URL.revokeObjectURL(url); res(null); }
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); res(null); };
+      img.src = url;
+    })));
+    imageLibrary = imageLibrary.filter(Boolean);
+    if (!imageLibrary.length) return;
+
+    btn.textContent = '⏳ Transcribing audio…';
+    await transcribeAudio();
+    if (!transcriptSegments.length) { alert('Transcription failed or returned no segments.'); return; }
+
+    btn.textContent = '⏳ Building storyboard…';
+    const rawEntries = await generateStoryboard();
+    showPhase('ai-wizard');
+    buildWizard(rawEntries);
+  } catch(e) {
+    alert('AI flow error: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Load →';
+  }
+}
+
+function imageToBase64Thumb(offscreen, maxW) {
+  maxW = maxW || 480;
+  const scale = Math.min(1, maxW / offscreen.width);
+  const t = document.createElement('canvas');
+  t.width = Math.round(offscreen.width * scale);
+  t.height = Math.round(offscreen.height * scale);
+  t.getContext('2d').drawImage(offscreen, 0, 0, t.width, t.height);
+  return { base64: t.toDataURL('image/jpeg', 0.82).split(',')[1], mime: 'image/jpeg' };
+}
+
+async function generateStoryboard() {
+  const txText = transcriptSegments.map((seg, i) =>
+    '[' + i + '] ' + fmtCue(seg.time) + ': "' + seg.text + '"'
+  ).join('\n');
+  const imgList = imageLibrary.map((img, i) => '[' + i + '] ' + img.name).join('\n');
+  const imgParts = imageLibrary.map(img => {
+    const {base64, mime} = imageToBase64Thumb(img.offscreen);
+    return {inlineData: {mimeType: mime, data: base64}};
+  });
+  const prompt = `You are mapping slide images to a spoken voiceover transcript.
+
+Images (${imageLibrary.length} total):
+${imgList}
+
+Transcript segments (index, time, text):
+${txText}
+
+For each transcript segment, suggest the best image and crop region. Also provide a second-best alternative if one exists. Flag segments where none of the available images fit well.
+
+Return ONLY a valid JSON array — no markdown, no explanation:
+[
+  {
+    "segmentIndex": <number>,
+    "imageIndex": <number>,
+    "region": {"x": <0-1>, "y": <0-1>, "w": <0-1>, "h": <0-1>},
+    "showFull": <boolean>,
+    "reason": "<one sentence>",
+    "confidence": "high" | "medium" | "low",
+    "needsMoreImages": <boolean>,
+    "missingImageHint": "<describe what image would help, or empty string>",
+    "alternative": {
+      "imageIndex": <number>,
+      "region": {"x": <0-1>, "y": <0-1>, "w": <0-1>, "h": <0-1>},
+      "showFull": <boolean>,
+      "reason": "<one sentence>"
+    }
+  }
+]
+
+Rules:
+- region is normalized 0–1 relative to each image's own dimensions (x,y = top-left, w/h = fraction of image size)
+- showFull: true means show the full image
+- Same image may appear multiple times with different regions
+- Omit segments that have truly no image match at all
+- Set needsMoreImages: true when confidence is low or no image fits well — be honest
+- missingImageHint: describe the visual content that would best match (e.g. "close-up of a product label" or "person speaking to camera")
+- alternative: provide a second-best option if one exists, otherwise omit or set to null
+- Minimum region size: 0.15 × 0.15
+- Sort by segmentIndex ascending`;
+
+  const res = await fetch(
+    'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=' + geminiApiKey,
+    { method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        contents: [{parts: [{text: prompt}, ...imgParts]}],
+        generationConfig: {temperature: 0}
+      })
+    }
+  );
+  if (!res.ok) { const e = await res.json(); throw new Error(e.error?.message || 'Storyboard generation failed'); }
+  const data = await res.json();
+  const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  return JSON.parse(rawText.replace(/```json|```/g, '').trim());
+}
+
+// ── AI WIZARD ──────────────────────────────────────────────────────────────────
+
+function normalizeRegion(r, showFull) {
+  if (showFull) return {x:0,y:0,w:1,h:1};
+  r = r || {};
+  return {
+    x: Math.max(0, Math.min(0.84, r.x || 0)),
+    y: Math.max(0, Math.min(0.84, r.y || 0)),
+    w: Math.max(0.15, Math.min(1, r.w || 0.7)),
+    h: Math.max(0.15, Math.min(1, r.h || 0.7))
+  };
+}
+
+function buildWizard(rawEntries) {
+  aiWizardEntries = (Array.isArray(rawEntries) ? rawEntries : [])
+    .filter(e =>
+      typeof e.segmentIndex === 'number' && typeof e.imageIndex === 'number' &&
+      e.imageIndex >= 0 && e.imageIndex < imageLibrary.length &&
+      e.segmentIndex >= 0 && e.segmentIndex < transcriptSegments.length
+    )
+    .sort((a, b) => a.segmentIndex - b.segmentIndex)
+    .map(e => {
+      // Normalize alternative if present and valid
+      let alt = null;
+      if (e.alternative && typeof e.alternative.imageIndex === 'number' &&
+          e.alternative.imageIndex >= 0 && e.alternative.imageIndex < imageLibrary.length) {
+        alt = {
+          imageIndex: e.alternative.imageIndex,
+          region: normalizeRegion(e.alternative.region, e.alternative.showFull),
+          showFull: !!e.alternative.showFull,
+          reason: e.alternative.reason || ''
+        };
+      }
+      return {
+        segmentIndex: e.segmentIndex,
+        imageIndex: e.imageIndex,
+        region: normalizeRegion(e.region, e.showFull),
+        showFull: !!e.showFull,
+        reason: e.reason || '',
+        confidence: e.confidence || 'medium',
+        needsMoreImages: !!e.needsMoreImages,
+        missingImageHint: e.missingImageHint || '',
+        alternative: alt,
+        accepted: false
+      };
+    });
+
+  wizardIdx = 0;
+  wizardAcceptedReveals = [];
+  wzSuggestionStep = 0;
+
+  // Gaps — segments with no suggestion
+  const assignedSet = new Set(aiWizardEntries.map(e => e.segmentIndex));
+  const gaps = transcriptSegments.map((seg,i) => ({seg,i})).filter(({i}) => !assignedSet.has(i));
+  const gapBox = document.getElementById('wizard-gap-box');
+  const gapList = document.getElementById('wizard-gap-list');
+  if (gaps.length && gapBox && gapList) {
+    gapList.innerHTML = gaps.slice(0, 10).map(({seg}) =>
+      '<div class="wizard-gap-item">[' + fmtCue(seg.time) + '] ' + (seg.text.length > 55 ? seg.text.slice(0,55)+'…' : seg.text) + '</div>'
+    ).join('') + (gaps.length > 10 ? '<div class="wizard-gap-item" style="color:var(--dim);">…and ' + (gaps.length-10) + ' more</div>' : '');
+    gapBox.style.display = '';
+  } else if (gapBox) { gapBox.style.display = 'none'; }
+
+  renderWizardStep();
+  if (!wizardCanvasInitialized) initWizardCanvas();
+}
+
+let wizardCanvasInitialized = false;
+function initWizardCanvas() {
+  const canvas = document.getElementById('wizard-canvas');
+  if (!canvas) return;
+  wizardCanvasInitialized = true;
+  canvas.addEventListener('mousedown', wzMouseDown);
+  canvas.addEventListener('mousemove', wzMouseMove);
+  window.addEventListener('mouseup', wzMouseUp);
+}
+
+function renderWizardStep() {
+  if (wizardIdx >= aiWizardEntries.length) { showWizardDone(); return; }
+  wzSuggestionStep = 0;
+  showWizardCanvas();
+  _renderWizardStepContent();
+}
+
+function _renderWizardStepContent() {
+  const entry = aiWizardEntries[wizardIdx];
+  const seg = transcriptSegments[entry.segmentIndex];
+
+  // Pick which suggestion to show (primary or alternative)
+  let display = entry;
+  let isAlt = wzSuggestionStep === 1 && entry.alternative;
+  if (isAlt) {
+    display = {imageIndex: entry.alternative.imageIndex, region: entry.alternative.region,
+               showFull: entry.alternative.showFull, reason: entry.alternative.reason};
+  }
+  const libImg = imageLibrary[display.imageIndex];
+
+  document.getElementById('wizard-bar-title').textContent = 'Suggestion ' + (wizardIdx+1) + ' of ' + aiWizardEntries.length;
+  document.getElementById('wizard-bar-sub').textContent = 'Accept, adjust the crop, or say "not this"';
+  document.getElementById('wizard-seg-time').textContent = fmtCue(seg.time);
+  document.getElementById('wizard-seg-text').textContent = seg.text;
+  document.getElementById('wizard-reason').textContent = display.reason || '—';
+  document.getElementById('wizard-img-name').textContent = '[' + display.imageIndex + '] ' + libImg.name;
+  document.getElementById('wizard-prev-btn').disabled = wizardIdx === 0;
+  document.getElementById('wizard-sameprev-btn').disabled = wizardAcceptedReveals.length === 0;
+  document.getElementById('wizard-done-btn').style.display = 'none';
+  document.getElementById('wizard-accept-btn').style.display = '';
+  document.getElementById('wizard-notthis-btn').style.display = '';
+  document.getElementById('wizard-hint-text').textContent = 'Drag the amber box to adjust • drag corners to resize';
+
+  // "Not this" button label changes by step
+  document.getElementById('wizard-notthis-btn').textContent =
+    wzSuggestionStep === 0 ? (entry.alternative ? 'Alt option →' : 'Not this →') :
+    wzSuggestionStep === 1 ? 'Still not this →' : 'Not this →';
+
+  // Confidence badge
+  const confWrap = document.getElementById('wizard-conf-wrap');
+  confWrap.innerHTML = '';
+  if (!isAlt && entry.confidence && entry.confidence !== 'high') {
+    const badge = document.createElement('span');
+    badge.className = 'wizard-conf-badge ' + entry.confidence;
+    badge.textContent = entry.confidence === 'low' ? '⚠ Low confidence' : '~ Medium confidence';
+    confWrap.appendChild(badge);
+  }
+
+  // Alt badge
+  const altWrap = document.getElementById('wizard-alt-wrap');
+  if (isAlt) {
+    altWrap.style.display = '';
+    altWrap.innerHTML = '<span class="wizard-alt-badge">Showing alternative option</span>';
+  } else {
+    altWrap.style.display = 'none';
+    altWrap.innerHTML = '';
+  }
+
+  // Needs more images hint
+  const needsBox = document.getElementById('wizard-needs-box');
+  const needsHint = document.getElementById('wizard-needs-hint');
+  if (!isAlt && entry.needsMoreImages && entry.missingImageHint) {
+    needsBox.style.display = '';
+    needsHint.textContent = entry.missingImageHint;
+  } else {
+    needsBox.style.display = 'none';
+  }
+
+  wzCurrentRegion = {...display.region};
+  renderWizardCanvas();
+}
+
+function renderWizardCanvas() {
+  const canvas = document.getElementById('wizard-canvas');
+  if (!canvas || wizardIdx >= aiWizardEntries.length) return;
+  const area = document.getElementById('wizard-canvas-area');
+  const maxW = area.clientWidth - 24, maxH = area.clientHeight - 24;
+  const sc = Math.min(maxW/9, maxH/16);
+  const cw = Math.round(9*sc), ch = Math.round(16*sc);
+  canvas.width = cw; canvas.height = ch;
+
+  const libImg = imageLibrary[getCurrentDisplayImageIndex()];
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = '#000'; ctx.fillRect(0,0,cw,ch);
+  const lay = getImageLayout(cw, ch, libImg.img.naturalWidth, libImg.img.naturalHeight);
+  ctx.drawImage(libImg.offscreen || libImg.img, lay.ix, lay.iy, lay.iw, lay.ih);
+
+  const r = wzCurrentRegion;
+  const isFullish = r.w > 0.97 && r.h > 0.97;
+
+  if (!isFullish) {
+    // Dim overlay then clear region window
+    ctx.fillStyle = 'rgba(0,0,0,0.52)';
+    ctx.fillRect(lay.ix, lay.iy, lay.iw, lay.ih);
+    const rx = lay.ix + r.x * lay.iw;
+    const ry = lay.iy + r.y * lay.ih;
+    const rw = r.w * lay.iw;
+    const rh = r.h * lay.ih;
+    ctx.save(); ctx.beginPath(); ctx.rect(rx,ry,rw,rh); ctx.clip();
+    ctx.drawImage(libImg.offscreen || libImg.img, lay.ix, lay.iy, lay.iw, lay.ih);
+    ctx.restore();
+    // Dashed amber border
+    ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2;
+    ctx.setLineDash([6,3]); ctx.strokeRect(rx+1,ry+1,rw-2,rh-2); ctx.setLineDash([]);
+    // Corner handles
+    const hs = 7;
+    ctx.fillStyle = '#f59e0b';
+    [[rx,ry],[rx+rw,ry],[rx,ry+rh],[rx+rw,ry+rh]].forEach(([hx,hy]) => {
+      ctx.fillRect(hx-hs/2, hy-hs/2, hs, hs);
+    });
+  }
+  // Frame border
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)'; ctx.lineWidth=1.5; ctx.setLineDash([]);
+  ctx.strokeRect(0.75,0.75,cw-1.5,ch-1.5);
+}
+
+function getWzCanvasRegion() {
+  const canvas = document.getElementById('wizard-canvas');
+  const libImg = imageLibrary[getCurrentDisplayImageIndex()];
+  const lay = getImageLayout(canvas.width, canvas.height, libImg.img.naturalWidth, libImg.img.naturalHeight);
+  const r = wzCurrentRegion;
+  return { lay,
+    rx: lay.ix + r.x * lay.iw, ry: lay.iy + r.y * lay.ih,
+    rw: r.w * lay.iw, rh: r.h * lay.ih };
+}
+
+function wzMouseDown(e) {
+  if (wizardIdx >= aiWizardEntries.length) return;
+  const canvas = document.getElementById('wizard-canvas');
+  const rect = canvas.getBoundingClientRect();
+  const mx = (e.clientX - rect.left) * canvas.width / rect.width;
+  const my = (e.clientY - rect.top) * canvas.height / rect.height;
+  const {lay, rx, ry, rw, rh} = getWzCanvasRegion();
+  const hs = 12;
+
+  if      (Math.abs(mx-rx)    < hs && Math.abs(my-ry)    < hs) wzDragMode = 'tl';
+  else if (Math.abs(mx-rx-rw) < hs && Math.abs(my-ry)    < hs) wzDragMode = 'tr';
+  else if (Math.abs(mx-rx)    < hs && Math.abs(my-ry-rh) < hs) wzDragMode = 'bl';
+  else if (Math.abs(mx-rx-rw) < hs && Math.abs(my-ry-rh) < hs) wzDragMode = 'br';
+  else if (mx >= rx && mx <= rx+rw && my >= ry && my <= ry+rh) wzDragMode = 'move';
+
+  if (wzDragMode) {
+    wzDragStart = {mx, my, origRegion: {...wzCurrentRegion}, lay};
+    e.preventDefault();
+  }
+}
+
+function wzMouseMove(e) {
+  if (!wzDragMode || !wzDragStart) return;
+  const canvas = document.getElementById('wizard-canvas');
+  const rect = canvas.getBoundingClientRect();
+  const mx = (e.clientX - rect.left) * canvas.width / rect.width;
+  const my = (e.clientY - rect.top) * canvas.height / rect.height;
+  const dx = (mx - wzDragStart.mx) / wzDragStart.lay.iw;
+  const dy = (my - wzDragStart.my) / wzDragStart.lay.ih;
+  const o = wzDragStart.origRegion;
+  const MIN = 0.1;
+  let r = {...o};
+
+  if (wzDragMode === 'move') {
+    r.x = Math.max(0, Math.min(1-o.w, o.x+dx));
+    r.y = Math.max(0, Math.min(1-o.h, o.y+dy));
+  } else if (wzDragMode === 'tl') {
+    const nx = Math.max(0, Math.min(o.x+o.w-MIN, o.x+dx));
+    const ny = Math.max(0, Math.min(o.y+o.h-MIN, o.y+dy));
+    r.x=nx; r.y=ny; r.w=o.x+o.w-nx; r.h=o.y+o.h-ny;
+  } else if (wzDragMode === 'tr') {
+    const ny = Math.max(0, Math.min(o.y+o.h-MIN, o.y+dy));
+    r.y=ny; r.h=o.y+o.h-ny; r.w=Math.max(MIN, Math.min(1-o.x, o.w+dx));
+  } else if (wzDragMode === 'bl') {
+    const nx = Math.max(0, Math.min(o.x+o.w-MIN, o.x+dx));
+    r.x=nx; r.w=o.x+o.w-nx; r.h=Math.max(MIN, Math.min(1-o.y, o.h+dy));
+  } else if (wzDragMode === 'br') {
+    r.w=Math.max(MIN, Math.min(1-o.x, o.w+dx));
+    r.h=Math.max(MIN, Math.min(1-o.y, o.h+dy));
+  }
+  wzCurrentRegion = r;
+  renderWizardCanvas();
+}
+
+function wzMouseUp() {
+  if (wzDragMode) {
+    wzDragMode = null; wzDragStart = null;
+    // Store adjusted region back into entry (or its alternative if that's what's showing)
+    if (aiWizardEntries[wizardIdx]) {
+      if (wzSuggestionStep === 1 && aiWizardEntries[wizardIdx].alternative) {
+        aiWizardEntries[wizardIdx].alternative.region = {...wzCurrentRegion};
+      } else {
+        aiWizardEntries[wizardIdx].region = {...wzCurrentRegion};
+      }
+    }
+  }
+}
+
+// Show/hide canvas vs picker area
+function showWizardCanvas() {
+  document.getElementById('wizard-canvas-area').style.display = '';
+  document.getElementById('wizard-picker-area').style.display = 'none';
+}
+function showWizardPicker() {
+  document.getElementById('wizard-canvas-area').style.display = 'none';
+  document.getElementById('wizard-picker-area').style.display = 'flex';
+}
+
+function wizardSameAsPrev() {
+  if (wizardIdx >= aiWizardEntries.length) return;
+  if (wizardAcceptedReveals.length === 0) return;
+  const prev = wizardAcceptedReveals[wizardAcceptedReveals.length - 1];
+  const entry = aiWizardEntries[wizardIdx];
+  entry.accepted = true;
+  wizardAcceptedReveals.push({
+    imageIndex: prev.imageIndex,
+    segmentIndex: entry.segmentIndex,
+    region: {...prev.region},
+    showFull: prev.showFull
+  });
+  wizardIdx++;
+  wzSuggestionStep = 0;
+  showWizardCanvas();
+  renderWizardStep();
+}
+
+function wizardAccept() {
+  if (wizardIdx >= aiWizardEntries.length) return;
+  const entry = aiWizardEntries[wizardIdx];
+  // Determine which imageIndex is actually being shown
+  const imgIdx = getCurrentDisplayImageIndex();
+  entry.accepted = true;
+  wizardAcceptedReveals.push({
+    imageIndex: imgIdx,
+    segmentIndex: entry.segmentIndex,
+    region: {...wzCurrentRegion},
+    showFull: wzCurrentRegion.w > 0.97 && wzCurrentRegion.h > 0.97
+  });
+  wizardIdx++;
+  wzSuggestionStep = 0;
+  showWizardCanvas();
+  renderWizardStep();
+}
+
+// "Not this →" — step through: primary → alternative → picker
+// When in picker-selected state (step 3), clicking the button goes back to picker
+function wizardNotThis() {
+  if (wizardIdx >= aiWizardEntries.length) return;
+  const entry = aiWizardEntries[wizardIdx];
+  if (wzSuggestionStep === 3) {
+    // Back to picker
+    wzSuggestionStep = 2;
+    showWizardPicker();
+    renderWizardPicker();
+    document.getElementById('wizard-notthis-btn').style.display = 'none';
+    document.getElementById('wizard-accept-btn').style.display = 'none';
+    document.getElementById('wizard-sameprev-btn').style.display = 'none';
+    document.getElementById('wizard-hint-text').textContent = 'Pick an image from the library or upload a new one';
+  } else if (wzSuggestionStep === 0 && entry.alternative) {
+    wzSuggestionStep = 1;
+    _renderWizardStepContent();
+  } else {
+    // Show picker (from primary with no alt, or from alt)
+    wzSuggestionStep = 2;
+    showWizardPicker();
+    renderWizardPicker();
+    document.getElementById('wizard-hint-text').textContent = 'Pick an image from the library or upload a new one';
+    document.getElementById('wizard-notthis-btn').style.display = 'none';
+    document.getElementById('wizard-accept-btn').style.display = 'none';
+    document.getElementById('wizard-sameprev-btn').style.display = 'none';
+  }
+}
+
+function renderWizardPicker() {
+  const grid = document.getElementById('wizard-picker-grid');
+  grid.innerHTML = '';
+  imageLibrary.forEach((lib, i) => {
+    const div = document.createElement('div');
+    div.className = 'wz-pick-thumb'; div.dataset.idx = i;
+    div.title = lib.name;
+    const img = document.createElement('img'); img.src = lib.thumbSrc || '';
+    const name = document.createElement('div'); name.className = 'wz-pick-name'; name.textContent = lib.name;
+    div.appendChild(img); div.appendChild(name);
+    div.addEventListener('click', () => wzPickerSelect(i));
+    grid.appendChild(div);
+  });
+}
+
+function wzPickerSelect(imgIdx) {
+  // Highlight selected
+  document.querySelectorAll('.wz-pick-thumb').forEach(el => el.classList.toggle('selected', +el.dataset.idx === imgIdx));
+  // Switch to canvas with this image, default full-image region
+  const entry = aiWizardEntries[wizardIdx];
+  // Temporarily override imageIndex for rendering purposes via a per-step field
+  entry._pickerImageIndex = imgIdx;
+  wzSuggestionStep = 3; // picker-selected state
+  wzCurrentRegion = {x:0.05, y:0.05, w:0.9, h:0.9};
+  showWizardCanvas();
+  // Update image name
+  document.getElementById('wizard-img-name').textContent = '[' + imgIdx + '] ' + imageLibrary[imgIdx].name;
+  document.getElementById('wizard-hint-text').textContent = 'Adjust the crop, then Accept';
+  document.getElementById('wizard-notthis-btn').textContent = 'Back to picker';
+  document.getElementById('wizard-notthis-btn').style.display = '';
+  document.getElementById('wizard-accept-btn').style.display = '';
+  document.getElementById('wizard-sameprev-btn').style.display = '';
+  renderWizardCanvas();
+}
+
+function getCurrentDisplayImageIndex() {
+  const entry = aiWizardEntries[wizardIdx];
+  if (!entry) return 0;
+  if (wzSuggestionStep === 3 && entry._pickerImageIndex != null) return entry._pickerImageIndex;
+  if (wzSuggestionStep === 1 && entry.alternative) return entry.alternative.imageIndex;
+  return entry.imageIndex;
+}
+
+async function wzPickerUpload(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => {
+    const off = document.createElement('canvas');
+    off.width = img.naturalWidth; off.height = img.naturalHeight;
+    off.getContext('2d').drawImage(img, 0, 0);
+    URL.revokeObjectURL(url);
+    const newEntry = {img, offscreen: off, thumbSrc: makeThumb(off), name: file.name,
+                      bgColor:'#000000', exposure:0, blackPoint:0, adjustedOffscreen:null};
+    imageLibrary.push(newEntry);
+    renderWizardPicker(); // rebuild grid with new image
+    wzPickerSelect(imageLibrary.length - 1); // auto-select the new one
+  };
+  img.onerror = () => URL.revokeObjectURL(url);
+  img.src = url;
+}
+
+// Actually skip this segment entirely
+function wizardTrulySkip() {
+  wizardIdx++;
+  wzSuggestionStep = 0;
+  showWizardCanvas();
+  renderWizardStep();
+}
+
+function wizardStepBack() {
+  if (wizardIdx === 0) return;
+  // If in picker or alt step, go back to primary view
+  if (wzSuggestionStep > 0) {
+    wzSuggestionStep = 0;
+    showWizardCanvas();
+    _renderWizardStepContent();
+    return;
+  }
+  wizardIdx--;
+  wzSuggestionStep = 0;
+  const entry = aiWizardEntries[wizardIdx];
+  if (entry && entry.accepted) {
+    const idx = wizardAcceptedReveals.findIndex(r => r.segmentIndex === entry.segmentIndex);
+    if (idx !== -1) wizardAcceptedReveals.splice(idx, 1);
+    entry.accepted = false;
+  }
+  showWizardCanvas();
+  renderWizardStep();
+}
+
+function wizardGoBack() {
+  if (wizardAcceptedReveals.length > 0) {
+    if (!confirm('Go back to upload? Current review progress will be lost.')) return;
+  }
+  goHome();
+}
+
+function showWizardDone() {
+  const n = wizardAcceptedReveals.length;
+  document.getElementById('wizard-bar-title').textContent = 'Review complete — ' + n + ' reveal' + (n!==1?'s':'') + ' accepted';
+  document.getElementById('wizard-bar-sub').textContent = n === 0 ? 'No reveals accepted — use ← Prev to go back' : 'Ready to build slides';
+  document.getElementById('wizard-done-btn').style.display = '';
+  document.getElementById('wizard-done-btn').disabled = n === 0;
+  document.getElementById('wizard-accept-btn').style.display = 'none';
+  document.getElementById('wizard-skip-btn').style.display = 'none';
+  document.getElementById('wizard-prev-btn').disabled = false;
+  // Summary canvas
+  const canvas = document.getElementById('wizard-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#0d0d0d'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = n > 0 ? '#22c55e' : '#f59e0b';
+  ctx.font = 'bold 20px "Inter",sans-serif';
+  ctx.fillText((n > 0 ? '✓ ' : '⚠ ') + n + ' reveal' + (n!==1?'s':'') + ' accepted', canvas.width/2, canvas.height/2 - 16);
+  ctx.font = '12px "Inter",sans-serif'; ctx.fillStyle = '#555';
+  ctx.fillText(n > 0 ? 'Click "Continue to editor →"' : 'Use ← Prev to go back and accept more', canvas.width/2, canvas.height/2 + 16);
+}
+
+function finishWizard() {
+  if (!wizardAcceptedReveals.length) return;
+  buildSlidesFromReveals();
+  showPhase('editor');
+  setTimeout(() => {
+    buildFilmstrip(); selectSlide(0); initColorPresets();
+    history = []; historyIdx = -1; snapshotHistory();
+    if (transcriptSegments.length) {
+      document.getElementById('transcript-section').classList.add('visible');
+      renderTranscriptList();
+      document.getElementById('st-transcript').textContent = transcriptSegments.length + ' segs';
+      document.getElementById('st-transcript').style.display = '';
+    }
+  }, 50);
+}
+
+function buildSlidesFromReveals() {
+  // Sort accepted reveals by cue time
+  const sorted = [...wizardAcceptedReveals].sort((a,b) =>
+    transcriptSegments[a.segmentIndex].time - transcriptSegments[b.segmentIndex].time
+  );
+  slides = [];
+  let curEntry = null;
+  for (const reveal of sorted) {
+    const lib = imageLibrary[reveal.imageIndex];
+    const seg = transcriptSegments[reveal.segmentIndex];
+    // Convert normalized region (0-1 of image dims) → pixel coords for crop system
+    const iw = lib.img.naturalWidth, ih = lib.img.naturalHeight;
+    const crop = {
+      x: reveal.showFull ? 0 : reveal.region.x * iw,
+      y: reveal.showFull ? 0 : reveal.region.y * ih,
+      w: reveal.showFull ? iw : reveal.region.w * iw,
+      h: reveal.showFull ? ih : reveal.region.h * ih,
+      cueTime: seg.time,
+      keyword: seg.text.split(/\s+/).slice(0,4).join(' '),
+      catIdx: -1, catX: 0.12, catY: 0.88, keepCat: false
+    };
+    // Group consecutive same-image reveals into one slide
+    if (curEntry && curEntry._imgIdx === reveal.imageIndex) {
+      curEntry.crops.push(crop);
+    } else {
+      curEntry = {
+        img: lib.img, offscreen: lib.offscreen, thumbSrc: lib.thumbSrc, name: lib.name,
+        crops: [crop], highlights: [], bgColor: '#000000',
+        exposure: 0, blackPoint: 0, adjustedOffscreen: null,
+        _imgIdx: reveal.imageIndex
+      };
+      slides.push(curEntry);
+    }
+  }
 }
 
 // ── INIT ───────────────────────────────────────────────────────────────────────
